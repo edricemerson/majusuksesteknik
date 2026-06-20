@@ -18,9 +18,9 @@
                     <a href="#about" className="hover:text-blue-400 transition-colors duration-200">
                         About Us
                     </a>
-                    <a href="#certificate" className="hover:text-blue-400 transition-colors duration-200">
+                    {/* <a href="#certificate" className="hover:text-blue-400 transition-colors duration-200">
                         Certificate
-                    </a>
+                    </a> */}
                     <a href="#reviews" className="hover:text-blue-400 transition-colors duration-200">
                         Reviews
                     </a>

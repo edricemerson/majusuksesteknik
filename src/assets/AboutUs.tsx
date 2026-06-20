@@ -1,4 +1,10 @@
 ﻿import { useEffect, useRef, useState } from "react";
+import bandara from "../photo/bandara.png"
+import telkom from "../photo/telkom.png"
+import kaspari from "../photo/kaspari.jpg"
+import tokoLOGO from "../photo/tokopediaLOGO.png"
+import shopeeLOGO from "../photo/shopeeLOGO.png"
+import lazadaLOGO from "../photo/lazadaLOGO.svg"
 
 const words = "NRT PRO & Yamamax Pro Official Distributor".split(" ");
 
@@ -124,7 +130,7 @@ function AboutUs() {
                     <div className="w-px bg-slate-700/60 self-stretch" />
 
                     {/* Our Videos */}
-                    <div ref={videoRef} className="flex-2 bg-slate-800/50 border border-slate-700/50 rounded-2xl p-5 flex flex-col gap-3">
+                    <div ref={videoRef} className="flex-2 bg-slate-800/50 border border-slate-700/50 p-5 flex flex-col gap-3">
                         <span className="text-white text-lg font-semibold tracking-wide">Our Videos</span>
                         <span className="text-blue-400 text-sm">Browse all our product videos</span>
                         <iframe
@@ -159,10 +165,51 @@ function AboutUs() {
                     </div>
                 </div>
 
+                {/* Trusted By */}
+                <div className="flex flex-col items-center gap-6 pt-4">
+                    <div className="flex items-center gap-4 w-full">
+                        <div className="flex-1 h-px bg-slate-700/60" />
+                            <span className="text-xs font-bold tracking-[0.25em] uppercase text-blue-400 shrink-0">
+                                Trusted By
+                            </span>
+                        <div className="flex-1 h-px bg-slate-700/60" />
+                    </div>
+                    <div className="grid grid-cols-3 gap-4 w-full">
+                        <div className="bg-white border border-slate-700/50 rounded-xl px-6 py-4 flex items-center justify-center hover:border-blue-500/50 transition-colors duration-300">
+                            <img src={bandara} className="h-24 w-full object-contain rounded-lg" />
+                        </div>
+                        {/* <div className="w-px h-8 bg-slate-700/60" /> */}
+                        <div className="bg-slate-200 border border-slate-700/50 rounded-xl px-6 py-4 flex items-center justify-center hover:border-blue-500/50 transition-colors duration-300">
+                            <img src={telkom} className="h-20 w-full object-contain rounded-lg" />
+                        </div>
+            
+                        <div className="rounded-xl px-6 py-4 flex items-center justify-center transition-all duration-300" style={{ backgroundColor: "#2c2f26" }}>
+                            <img src={kaspari} className="h-24 w-full object-contain rounded-lg" />
+                        </div>
+
+                        <div className="bg-slate-200 border border-slate-700/50 rounded-xl px-6 py-4 flex items-center justify-center hover:border-blue-500/50 transition-colors duration-300">
+                            <img src={tokoLOGO} className="h-20 w-full object-contain rounded-lg" />
+                        </div>
+
+                        <div className="bg-white border border-slate-700/50 rounded-xl px-6 py-4 flex items-center justify-center hover:border-blue-500/50 transition-colors duration-300">
+                            <img src={shopeeLOGO} className="h-20 w-full object-contain rounded-lg" />
+                        </div>
+                       
+                        <div className="bg-slate-200 border border-slate-700/50 rounded-xl px-6 py-4 flex items-center justify-center hover:border-blue-500/50 transition-colors duration-300">
+                            <img src={lazadaLOGO} className="h-20 w-full object-contain rounded-lg" />
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     );
 }
 export default AboutUs;
+
+
+
+
+
+
 
 
