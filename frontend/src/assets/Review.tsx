@@ -1,12 +1,102 @@
+import { useState } from "react";
+import { Star, MessageSquareDashed, User, MessageSquare } from "lucide-react";
+
 function Review() {
+    const [rating, setRating] = useState(0);
+    const [hovered, setHovered] = useState(0);
+
     return (
-        <div>
-            <div className="flex items-center">
-                <div className="flex-1 h-1 bg-slate-700/60" />
-                <div className="text-blue-400 text-3xl font-bold text-center mx-4">
-                    Our Reviews
+        <div className="relative mx-44 py-12 overflow-hidden">
+            <section id="reviews" />
+
+            {/* Background glows */}
+            <div className="absolute top-1/2 left-0 w-80 h-80 bg-blue-600/5 rounded-full blur-3xl pointer-events-none -translate-y-1/2" />
+            <div className="absolute top-1/2 right-0 w-80 h-80 bg-indigo-600/5 rounded-full blur-3xl pointer-events-none -translate-y-1/2" />
+
+            {/* Heading */}
+            <div className="flex items-center mb-10">
+                <div className="flex-1 h-px bg-linear-to-r from-transparent to-slate-700/60" />
+                <div className="text-center mx-8">
+                    <div className="text-xs font-bold tracking-[0.25em] uppercase text-blue-400 mb-1">What People Say</div>
+                    <div className="text-3xl text-white font-semibold">Our Reviews</div>
                 </div>
-                <div className="flex-1 h-1 bg-slate-700/60" />
+                <div className="flex-1 h-px bg-linear-to-l from-transparent to-slate-700/60" />
+            </div>
+
+            <div className="flex gap-6">
+                {/* Submit form */}
+                <div className="flex-1 relative bg-slate-900/80 backdrop-blur-sm border border-slate-700/50 rounded-2xl p-7 flex flex-col gap-5">
+                    <div className="absolute top-0 left-8 right-8 h-px bg-linear-to-r from-transparent via-blue-500/40 to-transparent" />
+
+                    <div className="flex items-center gap-2 mb-1">
+                        <div className="w-8 h-8 rounded-lg bg-blue-600/20 flex items-center justify-center">
+                            <MessageSquare className="w-4 h-4 text-blue-400" />
+                        </div>
+                        <h3 className="text-white font-semibold text-lg">Leave a Review</h3>
+                    </div>
+
+                    <div className="flex flex-col gap-1.5">
+                        <label className="flex items-center gap-1.5 text-slate-400 text-xs font-semibold tracking-widest uppercase">
+                            <User className="w-3 h-3" /> Name
+                        </label>
+                        <input
+                            className="bg-slate-800/80 border border-slate-700/80 rounded-xl px-4 py-2.5 text-white text-sm placeholder-slate-600 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500/30 transition duration-200"
+                            placeholder="Your name..."
+                        />
+                    </div>
+
+                    <div className="flex flex-col gap-2">
+                        <label className="text-slate-400 text-xs font-semibold tracking-widest uppercase">Rating</label>
+                        <div className="flex gap-1.5">
+                            {[1, 2, 3, 4, 5].map((star) => (
+                                <Star
+                                    key={star}
+                                    className={`w-8 h-8 cursor-pointer transition-all duration-150 ${
+                                        star <= (hovered || rating)
+                                            ? "text-yellow-400 fill-yellow-400 scale-110"
+                                            : "text-slate-700 hover:text-slate-500"
+                                    }`}
+                                    onMouseEnter={() => setHovered(star)}
+                                    onMouseLeave={() => setHovered(0)}
+                                    onClick={() => setRating(star)}
+                                />
+                            ))}
+                        </div>
+                    </div>
+
+                    <div className="flex flex-col gap-1.5">
+                        <label className="flex items-center gap-1.5 text-slate-400 text-xs font-semibold tracking-widest uppercase">
+                            <MessageSquareDashed className="w-3 h-3" /> Review
+                        </label>
+                        <textarea
+                            className="bg-slate-800/80 border border-slate-700/80 rounded-xl px-4 py-2.5 text-white text-sm placeholder-slate-600 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500/30 transition duration-200 resize-none min-h-32"
+                            placeholder="Write your review here..."
+                        />
+                    </div>
+
+                    <button className="mt-1 bg-linear-to-r from-blue-600 to-blue-500 hover:from-blue-500 hover:to-blue-400 text-white font-semibold py-2.5 rounded-xl transition duration-300 ease-in-out shadow-lg shadow-blue-900/30 hover:shadow-blue-800/40">
+                        Submit Review
+                    </button>
+                </div>
+
+                {/* Reviews display */}
+                <div className="flex-1 relative bg-slate-900/80 backdrop-blur-sm border border-slate-700/50 rounded-2xl p-7 flex flex-col items-center justify-center text-center gap-4">
+                    <div className="absolute top-0 left-8 right-8 h-px bg-linear-to-r from-transparent via-blue-500/40 to-transparent" />
+
+                    <div className="relative">
+                        <div className="w-24 h-24 rounded-full bg-blue-600/10 flex items-center justify-center">
+                            <div className="w-16 h-16 rounded-full bg-blue-600/10 flex items-center justify-center">
+                                <MessageSquare className="w-8 h-8 text-slate-500" />
+                            </div>
+                        </div>
+                        <div className="absolute inset-0 rounded-full bg-blue-500/5 blur-xl" />
+                    </div>
+
+                    <div>
+                        <p className="text-slate-300 text-base font-medium">No reviews yet</p>
+                        <p className="text-slate-600 text-sm mt-1">Be the first to leave a review!</p>
+                    </div>
+                </div>
             </div>
         </div>
     )

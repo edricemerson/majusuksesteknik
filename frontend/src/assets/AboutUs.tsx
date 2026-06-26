@@ -130,7 +130,7 @@ function AboutUs() {
                     <div className="w-px bg-slate-700/60 self-stretch" />
 
                     {/* Our Videos */}
-                    <div ref={videoRef} className="flex-2 bg-slate-800/50 border border-slate-700/50 p-5 flex flex-col gap-3">
+                    <div ref={videoRef} className="flex-2 bg-slate-800/50 border border-slate-700/50 rounded-2xl p-5 flex flex-col gap-3">
                         <span className="text-white text-lg font-semibold tracking-wide">Our Videos</span>
                         <span className="text-blue-400 text-sm">Browse all our product videos</span>
                         <iframe
@@ -175,11 +175,11 @@ function AboutUs() {
                         <div className="flex-1 h-px bg-slate-700/60" />
                     </div>
                     <div className="grid grid-cols-3 gap-4 w-full">
-                        <div className="bg-white border border-slate-700/50 rounded-xl px-6 py-4 flex items-center justify-center hover:border-blue-500/50 transition-colors duration-300">
+                        <div className="bg-white border border-slate-700/50 rounded-xl px-6 py-4 flex items-center justify-center hover:border-blue-500/50 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-blue-900/20 transition-all duration-300">
                             <img src={bandara} className="h-24 w-full object-contain rounded-lg" />
                         </div>
                         {/* <div className="w-px h-8 bg-slate-700/60" /> */}
-                        <div className="bg-slate-200 border border-slate-700/50 rounded-xl px-6 py-4 flex items-center justify-center hover:border-blue-500/50 transition-colors duration-300">
+                        <div className="bg-slate-200 border border-slate-700/50 rounded-xl px-6 py-4 flex items-center justify-center hover:border-blue-500/50 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-blue-900/20 transition-all duration-300">
                             <img src={telkom} className="h-20 w-full object-contain rounded-lg" />
                         </div>
             
@@ -187,15 +187,15 @@ function AboutUs() {
                             <img src={kaspari} className="h-24 w-full object-contain rounded-lg" />
                         </div>
 
-                        <div className="bg-slate-200 border border-slate-700/50 rounded-xl px-6 py-4 flex items-center justify-center hover:border-blue-500/50 transition-colors duration-300">
+                        <div className="bg-slate-200 border border-slate-700/50 rounded-xl px-6 py-4 flex items-center justify-center hover:border-blue-500/50 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-blue-900/20 transition-all duration-300">
                             <img src={tokoLOGO} className="h-20 w-full object-contain rounded-lg" />
                         </div>
 
-                        <div className="bg-white border border-slate-700/50 rounded-xl px-6 py-4 flex items-center justify-center hover:border-blue-500/50 transition-colors duration-300">
+                        <div className="bg-white border border-slate-700/50 rounded-xl px-6 py-4 flex items-center justify-center hover:border-blue-500/50 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-blue-900/20 transition-all duration-300">
                             <img src={shopeeLOGO} className="h-20 w-full object-contain rounded-lg" />
                         </div>
                        
-                        <div className="bg-slate-200 border border-slate-700/50 rounded-xl px-6 py-4 flex items-center justify-center hover:border-blue-500/50 transition-colors duration-300">
+                        <div className="bg-slate-200 border border-slate-700/50 rounded-xl px-6 py-4 flex items-center justify-center hover:border-blue-500/50 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-blue-900/20 transition-all duration-300">
                             <img src={lazadaLOGO} className="h-20 w-full object-contain rounded-lg" />
                         </div>
                     </div>
