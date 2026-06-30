@@ -4,7 +4,7 @@ import lazada from "../photo/lazada.svg";
 import tiktok from "../photo/tiktok.svg";
 import WA from "../photo/whatsapp.svg";
 import maju from "../photo/maju.png";
-import { useLanguage } from "../i18n/useLanguage";
+import { useLanguage } from "../language/useLanguage";
 
 const footerAnchor = "inline-flex text-sm text-slate-400 font-normal"
 

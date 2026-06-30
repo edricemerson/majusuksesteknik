@@ -8,8 +8,8 @@ import whatsappIcon from "../photo/whatsapp.svg";
 import tokopedia from "../photo/tokopedia.svg";
 import shopee from "../photo/shopee.svg";
 import lazada from "../photo/lazada.svg";
-import { useLanguage } from "../i18n/useLanguage";
-import type { Translations } from "../i18n/translations";
+import { useLanguage } from "../language/useLanguage";
+import type { Translations } from "../language/translations";
 
 const slides = [carousel2, carousel3, carousel4];
 

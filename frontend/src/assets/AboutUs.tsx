@@ -5,7 +5,7 @@ import kaspari from "../photo/kaspari.jpg"
 import tokoLOGO from "../photo/tokopediaLOGO.png"
 import shopeeLOGO from "../photo/shopeeLOGO.png"
 import lazadaLOGO from "../photo/lazadaLOGO.svg"
-import { useLanguage } from "../i18n/useLanguage";
+import { useLanguage } from "../language/useLanguage";
 
 const PLAYLIST_SRC = "https://www.youtube.com/embed/videoseries?list=PLyhboHVyLQ9j_RdYuUT-Hr5uXAFdL_Tct";
 

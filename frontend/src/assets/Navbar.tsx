@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Menu, X, Languages } from "lucide-react";
-import { useLanguage } from "../i18n/useLanguage";
+import { useLanguage } from "../language/useLanguage";
 
 function Navbar() {
     const [menuOpen, setMenuOpen] = useState(false);

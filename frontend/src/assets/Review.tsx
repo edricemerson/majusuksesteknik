@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Star, MessageSquareDashed, User, MessageSquare } from "lucide-react";
-import { useLanguage } from "../i18n/useLanguage";
-import type { Translations } from "../i18n/translations";
+import { useLanguage } from "../language/useLanguage";
+import type { Translations } from "../language/translations";
 
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:8080";
 const COOLDOWN_KEY = "mst_last_review_at";

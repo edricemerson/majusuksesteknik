@@ -1,5 +1,5 @@
 ﻿import './App.css'
-import { LanguageProvider } from './i18n/LanguageProvider.tsx'
+import { LanguageProvider } from './language/LanguageProvider.tsx'
 import Navbar from './assets/Navbar.tsx'
 import Home from './assets/Home.tsx'
 import AboutUs from './assets/AboutUs.tsx'
