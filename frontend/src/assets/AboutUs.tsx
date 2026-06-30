@@ -40,7 +40,7 @@ function AboutUs() {
         <div className="pb-16">
             <section id="about" />
             {/* Header row */}
-            <div ref={headerRef} className="px-48 mt-6 flex items-center gap-8">
+            <div ref={headerRef} className="px-4 sm:px-8 md:px-16 lg:px-32 xl:px-48 mt-6 flex flex-col lg:flex-row items-start lg:items-center gap-4 lg:gap-8">
                 <div className="shrink-0 flex flex-col gap-2">
                     <span
                         className={`text-xs font-bold tracking-[0.25em] uppercase text-blue-400
@@ -51,7 +51,7 @@ function AboutUs() {
                         Who We Are
                     </span>
                     <span
-                        className={`text-5xl text-white font-semibold transition-all duration-500 ease-out
+                        className={`text-3xl sm:text-4xl lg:text-5xl text-white font-semibold transition-all duration-500 ease-out
                             ${headerVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
                         style={{ transitionDelay: "100ms" }}
                     >
@@ -64,12 +64,12 @@ function AboutUs() {
                 </div>
 
                 <div
-                    className={`w-px self-stretch bg-slate-600 transition-all duration-500 ease-out
+                    className={`hidden lg:block w-px self-stretch bg-slate-600 transition-all duration-500 ease-out
                         ${headerVisible ? "opacity-100 scale-y-100" : "opacity-0 scale-y-0"}`}
                     style={{ transitionDelay: "300ms" }}
                 />
 
-                <div className="flex-1 flex flex-wrap gap-x-3 text-4xl text-gray-300 font-semibold">
+                <div className="flex-1 flex flex-wrap gap-x-3 text-2xl sm:text-3xl lg:text-4xl text-gray-300 font-semibold">
                     {words.map((word, i) => (
                         <span
                             key={i}
@@ -84,7 +84,7 @@ function AboutUs() {
             </div>
 
             {/* Body section */}
-            <div ref={bodyRef} className="px-48 mt-10 flex flex-col gap-8">
+            <div ref={bodyRef} className="px-4 sm:px-8 md:px-16 lg:px-32 xl:px-48 mt-10 flex flex-col gap-8">
 
                 {/* Paragraph */}
                 <div
@@ -103,7 +103,7 @@ function AboutUs() {
 
                 {/* Info columns */}
                 <div
-                    className={`flex items-stretch gap-6 transition-all duration-700 ease-out
+                    className={`flex flex-col lg:flex-row items-stretch gap-6 transition-all duration-700 ease-out
                         ${bodyVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
                     style={{ transitionDelay: "150ms" }}
                 >
@@ -127,10 +127,10 @@ function AboutUs() {
                         </a>
                     </div>
 
-                    <div className="w-px bg-slate-700/60 self-stretch" />
+                    <div className="hidden lg:block w-px bg-slate-700/60 self-stretch" />
 
                     {/* Our Videos */}
-                    <div ref={videoRef} className="flex-2 bg-slate-800/50 border border-slate-700/50 rounded-2xl p-5 flex flex-col gap-3">
+                    <div ref={videoRef} className="lg:flex-2 bg-slate-800/50 border border-slate-700/50 rounded-2xl p-5 flex flex-col gap-3">
                         <span className="text-white text-lg font-semibold tracking-wide">Our Videos</span>
                         <span className="text-blue-400 text-sm">Browse all our product videos</span>
                         <iframe
@@ -140,7 +140,7 @@ function AboutUs() {
                             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                             allowFullScreen
                         />
-                        <div className="flex gap-6">
+                        <div className="flex flex-col sm:flex-row gap-3 sm:gap-6">
                             <div className="flex-1">
                                 <a className="mt-1 w-full block text-center text-sm font-semibold text-white
                                     bg-blue-600 hover:bg-blue-700 transition-colors duration-200 rounded-xl py-2 px-2"
@@ -174,7 +174,7 @@ function AboutUs() {
                             </span>
                         <div className="flex-1 h-px bg-slate-700/60" />
                     </div>
-                    <div className="grid grid-cols-3 gap-4 w-full">
+                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 w-full">
                         <div className="bg-white border border-slate-700/50 rounded-xl px-6 py-4 flex items-center justify-center hover:border-blue-500/50 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-blue-900/20 transition-all duration-300">
                             <img src={bandara} className="h-24 w-full object-contain rounded-lg" />
                         </div>

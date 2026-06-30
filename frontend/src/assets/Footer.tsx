@@ -15,11 +15,11 @@ const marketplaceIcons = [
 
 function Footer() {
     return (
-        <div className="flex items-center px-10 py-6 mt-12 bg-slate-950 gap-8 border-t border-slate-800">
-            <div className="flex-1 text-slate-500 text-xl font-semibold">
+        <div className="flex flex-col lg:flex-row items-start lg:items-center px-4 sm:px-6 lg:px-10 py-6 mt-12 bg-slate-950 gap-8 border-t border-slate-800">
+            <div className="flex-1 text-slate-500 text-lg sm:text-xl font-semibold">
                 © 2026{" "}
                 <a href="https://github.com/edricemerson" target="_blank" rel="noreferrer"
-                    className="text-blue-700 transition duration-300 ease-in-out 
+                    className="text-blue-700 transition duration-300 ease-in-out
                 hover:text-blue-500">
                     Edric Emerson.
                 </a>
@@ -31,9 +31,10 @@ function Footer() {
                 </a>
             </div>
 
-            <div className="bg-slate-700 w-px self-stretch" />
+            <div className="hidden lg:block bg-slate-700 w-px self-stretch" />
+            <div className="lg:hidden bg-slate-800 h-px w-full" />
 
-            <div className="flex-2 flex gap-8">
+            <div className="w-full lg:flex-2 flex gap-8">
                 <div className="flex-1">
                     <div className="text-xs font-bold tracking-widest uppercase text-slate-400 mb-1">Links</div>
                     <div className="flex flex-col mt-2 gap-2 items-start">
@@ -46,7 +47,7 @@ function Footer() {
                 <div className="flex-1">
                     <div>
                         <div className="text-xs font-bold tracking-widest uppercase text-slate-400 mb-1">Marketplace</div>
-                        <div className="flex flex-row mt-2 gap-2">
+                        <div className="flex flex-row flex-wrap mt-2 gap-2">
                             {marketplaceIcons.map((icon, index) => (
                                 <a key={index} href={icon.href} target="_blank" rel="noreferrer">
                                     <img src={icon.src} className={`w-9 h-9 p-1 mr-3 rounded-xl
@@ -70,10 +71,11 @@ function Footer() {
                 </div>
             </div>
 
-            <div className="bg-slate-700 w-px self-stretch" />
+            <div className="hidden lg:block bg-slate-700 w-px self-stretch" />
+            <div className="lg:hidden bg-slate-800 h-px w-full" />
 
-            <div className="flex-2 flex flex-col gap-4">
-                <div className="flex gap-8">
+            <div className="w-full lg:flex-2 flex flex-col gap-4">
+                <div className="flex flex-col sm:flex-row gap-4 sm:gap-8">
                     <div className="flex-1">
                         <div className="text-xs font-bold tracking-widest uppercase text-slate-400 mb-1">Contact</div>
                         <div>
@@ -97,7 +99,7 @@ function Footer() {
                         </p>
                     </div>
                 </div>
-                <div className="relative w-sm mx-auto">
+                <div className="relative w-full max-w-sm mx-auto">
                     <img src={maju} className="w-full rounded-xl opacity-85" />
                 </div>
             </div>

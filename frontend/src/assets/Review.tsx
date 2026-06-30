@@ -1,12 +1,81 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Star, MessageSquareDashed, User, MessageSquare } from "lucide-react";
+
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:8080";
+
+type ReviewItem = {
+    id: number;
+    name: string;
+    rating: number;
+    comment: string;
+    created_at: string;
+};
 
 function Review() {
     const [rating, setRating] = useState(0);
     const [hovered, setHovered] = useState(0);
+    const [name, setName] = useState("");
+    const [comment, setComment] = useState("");
+    const [submitting, setSubmitting] = useState(false);
+    const [error, setError] = useState("");
+    const [success, setSuccess] = useState(false);
+
+    const [reviews, setReviews] = useState<ReviewItem[]>([]);
+    const [loadingReviews, setLoadingReviews] = useState(true);
+
+    useEffect(() => {
+        fetchReviews();
+    }, []);
+
+    async function fetchReviews() {
+        setLoadingReviews(true);
+        try {
+            const res = await fetch(`${API_URL}/reviews`);
+            if (!res.ok) throw new Error("Could not load reviews");
+            setReviews(await res.json());
+        } catch (err) {
+            void err;
+        } finally {
+            setLoadingReviews(false);
+        }
+    }
+
+    async function handleSubmit() {
+        setError("");
+        setSuccess(false);
+
+        if (!name.trim() || !comment.trim() || rating < 1 || rating > 5) {
+            setError("Name, comment, and a star rating are required.");
+            return;
+        }
+
+        setSubmitting(true);
+        try {
+            const res = await fetch(`${API_URL}/reviews`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ name, comment, rating }),
+            });
+
+            if (!res.ok) {
+                const body = await res.json().catch(() => ({}));
+                throw new Error(body.error || "Could not submit review");
+            }
+
+            setName("");
+            setComment("");
+            setRating(0);
+            setSuccess(true);
+            fetchReviews();
+        } catch (err) {
+            setError(err instanceof Error ? err.message : "Could not submit review");
+        } finally {
+            setSubmitting(false);
+        }
+    }
 
     return (
-        <div className="relative mx-44 py-12 overflow-hidden">
+        <div className="relative mx-4 sm:mx-8 md:mx-16 lg:mx-32 xl:mx-44 py-12 overflow-hidden">
             <section id="reviews" />
 
             {/* Background glows */}
@@ -18,14 +87,14 @@ function Review() {
                 <div className="flex-1 h-px bg-linear-to-r from-transparent to-slate-700/60" />
                 <div className="text-center mx-8">
                     <div className="text-xs font-bold tracking-[0.25em] uppercase text-blue-400 mb-1">What People Say</div>
-                    <div className="text-3xl text-white font-semibold">Our Reviews</div>
+                    <div className="text-2xl sm:text-3xl text-white font-semibold">Our Reviews</div>
                 </div>
                 <div className="flex-1 h-px bg-linear-to-l from-transparent to-slate-700/60" />
             </div>
 
-            <div className="flex gap-6">
+            <div className="flex flex-col lg:flex-row gap-6">
                 {/* Submit form */}
-                <div className="flex-1 relative bg-slate-900/80 backdrop-blur-sm border border-slate-700/50 rounded-2xl p-7 flex flex-col gap-5">
+                <div className="flex-1 relative bg-slate-900/80 backdrop-blur-sm border border-slate-700/50 rounded-2xl p-7 flex flex-col gap-5 lg:h-128">
                     <div className="absolute top-0 left-8 right-8 h-px bg-linear-to-r from-transparent via-blue-500/40 to-transparent" />
 
                     <div className="flex items-center gap-2 mb-1">
@@ -42,6 +111,8 @@ function Review() {
                         <input
                             className="bg-slate-800/80 border border-slate-700/80 rounded-xl px-4 py-2.5 text-white text-sm placeholder-slate-600 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500/30 transition duration-200"
                             placeholder="Your name..."
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
                         />
                     </div>
 
@@ -71,31 +142,73 @@ function Review() {
                         <textarea
                             className="bg-slate-800/80 border border-slate-700/80 rounded-xl px-4 py-2.5 text-white text-sm placeholder-slate-600 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500/30 transition duration-200 resize-none min-h-32"
                             placeholder="Write your review here..."
+                            value={comment}
+                            onChange={(e) => setComment(e.target.value)}
                         />
                     </div>
 
-                    <button className="mt-1 bg-linear-to-r from-blue-600 to-blue-500 hover:from-blue-500 hover:to-blue-400 text-white font-semibold py-2.5 rounded-xl transition duration-300 ease-in-out shadow-lg shadow-blue-900/30 hover:shadow-blue-800/40">
-                        Submit Review
+                    {error && <p className="text-red-400 text-sm">{error}</p>}
+                    {success && <p className="text-green-400 text-sm">Thanks for your review!</p>}
+
+                    <button
+                        onClick={handleSubmit}
+                        disabled={submitting}
+                        className="mt-1 bg-linear-to-r from-blue-600 to-blue-500 hover:from-blue-500 hover:to-blue-400 disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold py-2.5 rounded-xl transition duration-300 ease-in-out shadow-lg shadow-blue-900/30 hover:shadow-blue-800/40"
+                    >
+                        {submitting ? "Submitting..." : "Submit Review"}
                     </button>
                 </div>
 
                 {/* Reviews display */}
-                <div className="flex-1 relative bg-slate-900/80 backdrop-blur-sm border border-slate-700/50 rounded-2xl p-7 flex flex-col items-center justify-center text-center gap-4">
+                <div className="themed-scrollbar flex-1 relative bg-slate-900/80 backdrop-blur-sm border border-slate-700/50 rounded-2xl p-7 flex flex-col gap-4 h-96 lg:h-128 overflow-y-auto">
                     <div className="absolute top-0 left-8 right-8 h-px bg-linear-to-r from-transparent via-blue-500/40 to-transparent" />
 
-                    <div className="relative">
-                        <div className="w-24 h-24 rounded-full bg-blue-600/10 flex items-center justify-center">
-                            <div className="w-16 h-16 rounded-full bg-blue-600/10 flex items-center justify-center">
-                                <MessageSquare className="w-8 h-8 text-slate-500" />
+                    {loadingReviews ? (
+                        <div className="flex-1 flex items-center justify-center text-slate-500 text-sm">Loading reviews...</div>
+                    ) : reviews.length === 0 ? (
+                        <div className="flex-1 flex flex-col items-center justify-center text-center gap-4">
+                            <div className="relative">
+                                <div className="w-24 h-24 rounded-full bg-blue-600/10 flex items-center justify-center">
+                                    <div className="w-16 h-16 rounded-full bg-blue-600/10 flex items-center justify-center">
+                                        <MessageSquare className="w-8 h-8 text-slate-500" />
+                                    </div>
+                                </div>
+                                <div className="absolute inset-0 rounded-full bg-blue-500/5 blur-xl" />
+                            </div>
+
+                            <div>
+                                <p className="text-slate-300 text-base font-medium">No reviews yet</p>
+                                <p className="text-slate-600 text-sm mt-1">Be the first to leave a review!</p>
                             </div>
                         </div>
-                        <div className="absolute inset-0 rounded-full bg-blue-500/5 blur-xl" />
-                    </div>
-
-                    <div>
-                        <p className="text-slate-300 text-base font-medium">No reviews yet</p>
-                        <p className="text-slate-600 text-sm mt-1">Be the first to leave a review!</p>
-                    </div>
+                    ) : (
+                        reviews.map((rev) => (
+                            <div
+                                key={rev.id}
+                                className="bg-slate-800/60 border border-slate-700/60 rounded-xl p-4 flex flex-col gap-1.5"
+                            >
+                                <div className="flex items-center justify-between">
+                                    <div className="flex items-center gap-1.5 text-slate-200 font-semibold text-sm">
+                                        <User className="w-3.5 h-3.5 text-blue-400" /> {rev.name}
+                                    </div>
+                                    <div className="flex gap-0.5">
+                                        {[1, 2, 3, 4, 5].map((star) => (
+                                            <Star
+                                                key={star}
+                                                className={`w-3.5 h-3.5 ${
+                                                    star <= rev.rating ? "text-yellow-400 fill-yellow-400" : "text-slate-700"
+                                                }`}
+                                            />
+                                        ))}
+                                    </div>
+                                </div>
+                                <p className="text-slate-400 text-sm">{rev.comment}</p>
+                                <p className="text-slate-600 text-xs">
+                                    {new Date(rev.created_at).toLocaleDateString()}
+                                </p>
+                            </div>
+                        ))
+                    )}
                 </div>
             </div>
         </div>

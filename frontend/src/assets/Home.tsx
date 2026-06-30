@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "react";
+import type { ComponentType } from "react";
 import carousel2 from "../photo/carousel2.png";
 import carousel3 from "../photo/carousel3.png";
 import carousel4 from "../photo/carousel4.png";
@@ -39,6 +40,49 @@ const whyUs = [
     },
 ];
 
+type WhyUsItem = {
+    icon: ComponentType<{ className?: string }>;
+    title: string;
+    desc: string;
+    extraIcon?: string;
+    extraIcons?: { src: string; href: string; className: string }[];
+};
+
+function WhyUsCard({ icon: Icon, title, desc, extraIcon, extraIcons }: WhyUsItem) {
+    return (
+        <div className="relative bg-slate-900/70 backdrop-blur-sm
+            border border-slate-700/50 rounded-xl p-5 flex flex-col
+            items-center text-center hover:-translate-y-1 hover:border-blue-500/30
+            hover:shadow-lg hover:shadow-blue-900/20 transition-all duration-300"
+        >
+            <div className="absolute top-0 left-6 right-6 h-px bg-linear-to-r from-transparent via-blue-500/30 to-transparent" />
+            <div className="w-12 h-12 rounded-full bg-blue-600/20 ring-1 ring-blue-500/20 flex items-center justify-center mb-3">
+                <Icon className="text-blue-400 w-8 h-8" />
+            </div>
+            <h3 className="text-white font-semibold text-lg mb-1">{title}</h3>
+            <p className="text-slate-400 leading-relaxed">{desc}</p>
+            {extraIcon && (
+                <a href="https://wa.me/628113389098" target="_blank" rel="noreferrer">
+                    <img src={extraIcon} className="w-10 h-10 p-2 mt-2 bg-green-700 rounded-xl border-green-600 border-2
+                    transition duration-300 ease-in-out hover:bg-green-800" />
+                </a>
+            )}
+            {extraIcons && (
+                <div className="flex items-center gap-2 mt-2">
+                    {extraIcons.map((icon, index) => (
+                        <a key={index} href={icon.href} target="_blank" rel="noreferrer">
+                            <img src={icon.src}
+                                className={`w-10 h-10 p-2 rounded-xl border-2
+                                transition duration-300 ease-in-out ${icon.className}`}
+                            />
+                        </a>
+                    ))}
+                </div>
+            )}
+        </div>
+    );
+}
+
 function Home() {
     const trackRef = useRef<HTMLDivElement>(null);
     const posRef = useRef(0);
@@ -67,10 +111,10 @@ function Home() {
     }, []);
 
     return (
-        
-        <div className="w-full" style={{ height: "calc(100vh - 64px)" }}>
+
+        <div className="w-full">
             <section id="home" />
-            <div className="relative w-full h-full overflow-hidden bg-black">
+            <div className="relative w-full h-120 sm:h-140 lg:h-[calc(100vh-64px)] overflow-hidden bg-black">
                 {/* Dark overlay */}
                 <div className="absolute inset-0 bg-linear-to-b from-black/20 to-black/65 z-10 pointer-events-none" />
 
@@ -88,46 +132,17 @@ function Home() {
 
                 {/* Center Content */}
                 <div className="absolute inset-0 z-30 flex flex-col items-center justify-center text-center px-4">
-                    <h1 className="text-5xl font-bold bg-clip-text text-transparent bg-linear-to-r from-white via-blue-100 to-blue-300 drop-shadow-lg pb-3">
+                    <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold bg-clip-text text-transparent bg-linear-to-r from-white via-blue-100 to-blue-300 drop-shadow-lg pb-3">
                         Maju Sukses Teknik
                     </h1>
-                    <p className="mt-4 text-slate-300 text-lg max-w-2xl leading-relaxed">
+                    <p className="mt-4 text-slate-300 text-base sm:text-lg max-w-2xl leading-relaxed">
                         Your trusted source for professional power tools and industrial equipment.
                     </p>
 
-                    {/* Why Choose Us Cards */}
-                    <div className="mt-10 grid grid-cols-4 gap-4 w-full max-w-7xl">
-                        {whyUs.map(({ icon: Icon, title, desc, extraIcon, extraIcons }) => (
-                            <div key={title} className="relative bg-slate-900/70 backdrop-blur-sm
-                                border border-slate-700/50 rounded-xl p-5 flex flex-col
-                                items-center text-center hover:-translate-y-1 hover:border-blue-500/30
-                                hover:shadow-lg hover:shadow-blue-900/20 transition-all duration-300"
-                            >
-                                <div className="absolute top-0 left-6 right-6 h-px bg-linear-to-r from-transparent via-blue-500/30 to-transparent" />
-                                <div className="w-12 h-12 rounded-full bg-blue-600/20 ring-1 ring-blue-500/20 flex items-center justify-center mb-3">
-                                    <Icon className="text-blue-400 w-8 h-8" />
-                                </div>
-                                <h3 className="text-white font-semibold text-lg mb-1">{title}</h3>
-                                <p className="text-slate-400 leading-relaxed">{desc}</p>
-                                {extraIcon && (
-                                    <a href="https://wa.me/628113389098" target="_blank" rel="noreferrer">
-                                        <img src={extraIcon} className="w-10 h-10 p-2 mt-2 bg-green-700 rounded-xl border-green-600 border-2
-                                        transition duration-300 ease-in-out hover:bg-green-800" />
-                                    </a>
-                                )}
-                                {extraIcons && (
-                                    <div className="flex items-center gap-2 mt-2">
-                                        {extraIcons.map((icon, index) => (
-                                            <a key={index} href={icon.href} target="_blank" rel="noreferrer">
-                                                <img src={icon.src}
-                                                    className={`w-10 h-10 p-2 rounded-xl border-2
-                                                    transition duration-300 ease-in-out ${icon.className}`}
-                                                />
-                                            </a>
-                                        ))}
-                                    </div>
-                                )}
-                            </div>
+                    {/* Why Choose Us Cards (desktop: overlaid on hero) */}
+                    <div className="hidden lg:grid mt-10 grid-cols-4 gap-4 w-full max-w-7xl">
+                        {whyUs.map((item) => (
+                            <WhyUsCard key={item.title} {...item} />
                         ))}
                     </div>
                 </div>
@@ -139,11 +154,18 @@ function Home() {
                     {infinite.map((src, i) => (
                         <div key={i} className="h-full" style={{ width: "100vw", flexShrink: 0 }}>
                             <img src={src} alt={`Slide ${(i % slides.length) + 1}`}
-                                className="w-full h-full object-fill"
+                                className="w-full h-full object-cover"
                             />
                         </div>
                     ))}
                 </div>
+            </div>
+
+            {/* Why Choose Us Cards (mobile/tablet: normal flow below hero) */}
+            <div className="lg:hidden grid grid-cols-1 sm:grid-cols-2 gap-4 px-4 py-8 bg-slate-900">
+                {whyUs.map((item) => (
+                    <WhyUsCard key={item.title} {...item} />
+                ))}
             </div>
         </div>
     );
