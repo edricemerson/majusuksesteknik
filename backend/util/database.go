@@ -4,14 +4,18 @@ import (
 	"database/sql"
 	"time"
 
-	_ "github.com/jackc/pgx/v5/stdlib"
+	"github.com/jackc/pgx/v5"
+	"github.com/jackc/pgx/v5/stdlib"
 )
 
 func ConnectDB(cfg *Config) (*sql.DB, error) {
-	db, err := sql.Open("pgx", cfg.DatabaseURL)
+	pgxCfg, err := pgx.ParseConfig(cfg.DatabaseURL)
 	if err != nil {
 		return nil, err
 	}
+	pgxCfg.DefaultQueryExecMode = pgx.QueryExecModeSimpleProtocol
+
+	db := stdlib.OpenDB(*pgxCfg)
 
 	db.SetMaxOpenConns(25)
 	db.SetMaxIdleConns(25)

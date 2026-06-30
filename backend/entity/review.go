@@ -8,4 +8,6 @@ type Review struct {
 	Rating    int       `json:"rating"`
 	Comment   string    `json:"comment"`
 	CreatedAt time.Time `json:"created_at"`
+	IPAddress string    `json:"-"`
+	Pinned    bool      `json:"-"`
 }

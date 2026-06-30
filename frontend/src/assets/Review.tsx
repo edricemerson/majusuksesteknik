@@ -2,6 +2,23 @@ import { useEffect, useState } from "react";
 import { Star, MessageSquareDashed, User, MessageSquare } from "lucide-react";
 
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:8080";
+const COOLDOWN_KEY = "mst_last_review_at";
+const COOLDOWN_MS = 24 * 60 * 60 * 1000;
+
+function readCooldownUntil(): number | null {
+    const raw = localStorage.getItem(COOLDOWN_KEY);
+    if (!raw) return null;
+    const until = Number(raw) + COOLDOWN_MS;
+    return until > Date.now() ? until : null;
+}
+
+function formatRemaining(ms: number): string {
+    const totalMinutes = Math.ceil(ms / 60000);
+    const hours = Math.floor(totalMinutes / 60);
+    const minutes = totalMinutes % 60;
+    if (hours <= 0) return `${minutes}m`;
+    return `${hours}h ${minutes}m`;
+}
 
 type ReviewItem = {
     id: number;
@@ -22,9 +39,12 @@ function Review() {
 
     const [reviews, setReviews] = useState<ReviewItem[]>([]);
     const [loadingReviews, setLoadingReviews] = useState(true);
+    const [cooldownUntil, setCooldownUntil] = useState<number | null>(() => readCooldownUntil());
 
     useEffect(() => {
         fetchReviews();
+        const interval = setInterval(() => setCooldownUntil(readCooldownUntil()), 60000);
+        return () => clearInterval(interval);
     }, []);
 
     async function fetchReviews() {
@@ -59,9 +79,14 @@ function Review() {
 
             if (!res.ok) {
                 const body = await res.json().catch(() => ({}));
+                if (res.status === 429) {
+                    setCooldownUntil(Date.now() + COOLDOWN_MS);
+                }
                 throw new Error(body.error || "Could not submit review");
             }
 
+            localStorage.setItem(COOLDOWN_KEY, String(Date.now()));
+            setCooldownUntil(Date.now() + COOLDOWN_MS);
             setName("");
             setComment("");
             setRating(0);
@@ -73,6 +98,8 @@ function Review() {
             setSubmitting(false);
         }
     }
+
+    const isCoolingDown = cooldownUntil !== null && cooldownUntil > Date.now();
 
     return (
         <div className="relative mx-4 sm:mx-8 md:mx-16 lg:mx-32 xl:mx-44 py-12 overflow-hidden">
@@ -149,13 +176,18 @@ function Review() {
 
                     {error && <p className="text-red-400 text-sm">{error}</p>}
                     {success && <p className="text-green-400 text-sm">Thanks for your review!</p>}
+                    {isCoolingDown && cooldownUntil && (
+                        <p className="text-slate-500 text-sm">
+                            You can submit another review in {formatRemaining(cooldownUntil - Date.now())}.
+                        </p>
+                    )}
 
                     <button
                         onClick={handleSubmit}
-                        disabled={submitting}
+                        disabled={submitting || isCoolingDown}
                         className="mt-1 bg-linear-to-r from-blue-600 to-blue-500 hover:from-blue-500 hover:to-blue-400 disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold py-2.5 rounded-xl transition duration-300 ease-in-out shadow-lg shadow-blue-900/30 hover:shadow-blue-800/40"
                     >
-                        {submitting ? "Submitting..." : "Submit Review"}
+                        {submitting ? "Submitting..." : isCoolingDown ? "Already submitted today" : "Submit Review"}
                     </button>
                 </div>
 

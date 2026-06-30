@@ -1,8 +1,10 @@
 package main
 
 import (
+	"context"
 	"log"
 	"net/http"
+	"time"
 
 	"github.com/joho/godotenv"
 	"github.com/rs/cors"
@@ -30,6 +32,8 @@ func main() {
 	reviewSvc := review.NewService(reviewRepo)
 	reviewHandler := handler.NewReviewHandler(reviewSvc)
 
+	go purgeExpiredReviewsLoop(reviewSvc)
+
 	mux := http.NewServeMux()
 	mux.HandleFunc("POST /reviews", reviewHandler.Create)
 	mux.HandleFunc("GET /reviews", reviewHandler.GetAll)
@@ -50,4 +54,17 @@ func main() {
 
 	log.Println("server starting on :" + cfg.Port)
 	http.ListenAndServe(":"+cfg.Port, h)
+}
+
+func purgeExpiredReviewsLoop(svc review.Service) {
+	ticker := time.NewTicker(1 * time.Hour)
+	defer ticker.Stop()
+	for {
+		if n, err := svc.PurgeExpired(context.Background()); err != nil {
+			log.Println("purge expired reviews failed:", err)
+		} else if n > 0 {
+			log.Println("purged expired reviews:", n)
+		}
+		<-ticker.C
+	}
 }

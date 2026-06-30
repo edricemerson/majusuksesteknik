@@ -3,8 +3,10 @@ package handler
 import (
 	"encoding/json"
 	"errors"
+	"net"
 	"net/http"
 	"strconv"
+	"strings"
 
 	"backend/entity"
 	"backend/service/review"
@@ -36,8 +38,12 @@ func (h *ReviewHandler) Create(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	rev := entity.Review{Name: req.Name, Rating: req.Rating, Comment: req.Comment}
+	rev := entity.Review{Name: req.Name, Rating: req.Rating, Comment: req.Comment, IPAddress: clientIP(r)}
 	if err := h.service.Create(r.Context(), &rev); err != nil {
+		if errors.Is(err, review.ErrRateLimited) {
+			writeError(w, http.StatusTooManyRequests, err.Error())
+			return
+		}
 		writeError(w, http.StatusInternalServerError, "could not create review")
 		return
 	}
@@ -58,6 +64,17 @@ func (h *ReviewHandler) GetAll(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	writeJSON(w, http.StatusOK, reviews)
+}
+
+func clientIP(r *http.Request) string {
+	if fwd := r.Header.Get("X-Forwarded-For"); fwd != "" {
+		return strings.TrimSpace(strings.Split(fwd, ",")[0])
+	}
+	host, _, err := net.SplitHostPort(r.RemoteAddr)
+	if err != nil {
+		return r.RemoteAddr
+	}
+	return host
 }
 
 func writeJSON(w http.ResponseWriter, status int, v any) {
