@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import { Star, MessageSquareDashed, User, MessageSquare } from "lucide-react";
+import { useLanguage } from "../i18n/useLanguage";
+import type { Translations } from "../i18n/translations";
 
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:8080";
 const COOLDOWN_KEY = "mst_last_review_at";
@@ -20,6 +22,11 @@ function formatRemaining(ms: number): string {
     return `${hours}h ${minutes}m`;
 }
 
+const KNOWN_BACKEND_ERRORS: Record<string, keyof Translations["review"]> = {
+    "name, comment, and rating (1-5) are required": "validationError",
+    "you can only post one review per day": "rateLimitedError",
+};
+
 type ReviewItem = {
     id: number;
     name: string;
@@ -29,6 +36,7 @@ type ReviewItem = {
 };
 
 function Review() {
+    const { t } = useLanguage();
     const [rating, setRating] = useState(0);
     const [hovered, setHovered] = useState(0);
     const [name, setName] = useState("");
@@ -51,7 +59,7 @@ function Review() {
         setLoadingReviews(true);
         try {
             const res = await fetch(`${API_URL}/reviews`);
-            if (!res.ok) throw new Error("Could not load reviews");
+            if (!res.ok) throw new Error("could not load reviews");
             setReviews(await res.json());
         } catch (err) {
             void err;
@@ -65,7 +73,7 @@ function Review() {
         setSuccess(false);
 
         if (!name.trim() || !comment.trim() || rating < 1 || rating > 5) {
-            setError("Name, comment, and a star rating are required.");
+            setError(t.review.validationError);
             return;
         }
 
@@ -82,7 +90,8 @@ function Review() {
                 if (res.status === 429) {
                     setCooldownUntil(Date.now() + COOLDOWN_MS);
                 }
-                throw new Error(body.error || "Could not submit review");
+                const key = KNOWN_BACKEND_ERRORS[body.error];
+                throw new Error(key ? t.review[key] : body.error || t.review.couldNotSubmit);
             }
 
             localStorage.setItem(COOLDOWN_KEY, String(Date.now()));
@@ -93,7 +102,7 @@ function Review() {
             setSuccess(true);
             fetchReviews();
         } catch (err) {
-            setError(err instanceof Error ? err.message : "Could not submit review");
+            setError(err instanceof Error ? err.message : t.review.couldNotSubmit);
         } finally {
             setSubmitting(false);
         }
@@ -113,8 +122,8 @@ function Review() {
             <div className="flex items-center mb-10">
                 <div className="flex-1 h-px bg-linear-to-r from-transparent to-slate-700/60" />
                 <div className="text-center mx-8">
-                    <div className="text-xs font-bold tracking-[0.25em] uppercase text-blue-400 mb-1">What People Say</div>
-                    <div className="text-2xl sm:text-3xl text-white font-semibold">Our Reviews</div>
+                    <div className="text-xs font-bold tracking-[0.25em] uppercase text-blue-400 mb-1">{t.review.whatPeopleSay}</div>
+                    <div className="text-2xl sm:text-3xl text-white font-semibold">{t.review.ourReviews}</div>
                 </div>
                 <div className="flex-1 h-px bg-linear-to-l from-transparent to-slate-700/60" />
             </div>
@@ -128,23 +137,23 @@ function Review() {
                         <div className="w-8 h-8 rounded-lg bg-blue-600/20 flex items-center justify-center">
                             <MessageSquare className="w-4 h-4 text-blue-400" />
                         </div>
-                        <h3 className="text-white font-semibold text-lg">Leave a Review</h3>
+                        <h3 className="text-white font-semibold text-lg">{t.review.leaveAReview}</h3>
                     </div>
 
                     <div className="flex flex-col gap-1.5">
                         <label className="flex items-center gap-1.5 text-slate-400 text-xs font-semibold tracking-widest uppercase">
-                            <User className="w-3 h-3" /> Name
+                            <User className="w-3 h-3" /> {t.review.name}
                         </label>
                         <input
                             className="bg-slate-800/80 border border-slate-700/80 rounded-xl px-4 py-2.5 text-white text-sm placeholder-slate-600 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500/30 transition duration-200"
-                            placeholder="Your name..."
+                            placeholder={t.review.namePlaceholder}
                             value={name}
                             onChange={(e) => setName(e.target.value)}
                         />
                     </div>
 
                     <div className="flex flex-col gap-2">
-                        <label className="text-slate-400 text-xs font-semibold tracking-widest uppercase">Rating</label>
+                        <label className="text-slate-400 text-xs font-semibold tracking-widest uppercase">{t.review.rating}</label>
                         <div className="flex gap-1.5">
                             {[1, 2, 3, 4, 5].map((star) => (
                                 <Star
@@ -164,21 +173,21 @@ function Review() {
 
                     <div className="flex flex-col gap-1.5">
                         <label className="flex items-center gap-1.5 text-slate-400 text-xs font-semibold tracking-widest uppercase">
-                            <MessageSquareDashed className="w-3 h-3" /> Review
+                            <MessageSquareDashed className="w-3 h-3" /> {t.review.reviewLabel}
                         </label>
                         <textarea
                             className="bg-slate-800/80 border border-slate-700/80 rounded-xl px-4 py-2.5 text-white text-sm placeholder-slate-600 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500/30 transition duration-200 resize-none min-h-32"
-                            placeholder="Write your review here..."
+                            placeholder={t.review.reviewPlaceholder}
                             value={comment}
                             onChange={(e) => setComment(e.target.value)}
                         />
                     </div>
 
                     {error && <p className="text-red-400 text-sm">{error}</p>}
-                    {success && <p className="text-green-400 text-sm">Thanks for your review!</p>}
+                    {success && <p className="text-green-400 text-sm">{t.review.thanks}</p>}
                     {isCoolingDown && cooldownUntil && (
                         <p className="text-slate-500 text-sm">
-                            You can submit another review in {formatRemaining(cooldownUntil - Date.now())}.
+                            {t.review.cooldownPrefix}{formatRemaining(cooldownUntil - Date.now())}{t.review.cooldownSuffix}
                         </p>
                     )}
 
@@ -187,7 +196,7 @@ function Review() {
                         disabled={submitting || isCoolingDown}
                         className="mt-1 bg-linear-to-r from-blue-600 to-blue-500 hover:from-blue-500 hover:to-blue-400 disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold py-2.5 rounded-xl transition duration-300 ease-in-out shadow-lg shadow-blue-900/30 hover:shadow-blue-800/40"
                     >
-                        {submitting ? "Submitting..." : isCoolingDown ? "Already submitted today" : "Submit Review"}
+                        {submitting ? t.review.submitting : isCoolingDown ? t.review.alreadySubmitted : t.review.submitReview}
                     </button>
                 </div>
 
@@ -196,7 +205,7 @@ function Review() {
                     <div className="absolute top-0 left-8 right-8 h-px bg-linear-to-r from-transparent via-blue-500/40 to-transparent" />
 
                     {loadingReviews ? (
-                        <div className="flex-1 flex items-center justify-center text-slate-500 text-sm">Loading reviews...</div>
+                        <div className="flex-1 flex items-center justify-center text-slate-500 text-sm">{t.review.loadingReviews}</div>
                     ) : reviews.length === 0 ? (
                         <div className="flex-1 flex flex-col items-center justify-center text-center gap-4">
                             <div className="relative">
@@ -209,8 +218,8 @@ function Review() {
                             </div>
 
                             <div>
-                                <p className="text-slate-300 text-base font-medium">No reviews yet</p>
-                                <p className="text-slate-600 text-sm mt-1">Be the first to leave a review!</p>
+                                <p className="text-slate-300 text-base font-medium">{t.review.noReviewsYet}</p>
+                                <p className="text-slate-600 text-sm mt-1">{t.review.beFirstToReview}</p>
                             </div>
                         </div>
                     ) : (

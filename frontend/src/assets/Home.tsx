@@ -8,25 +8,29 @@ import whatsappIcon from "../photo/whatsapp.svg";
 import tokopedia from "../photo/tokopedia.svg";
 import shopee from "../photo/shopee.svg";
 import lazada from "../photo/lazada.svg";
+import { useLanguage } from "../i18n/useLanguage";
+import type { Translations } from "../i18n/translations";
 
 const slides = [carousel2, carousel3, carousel4];
 
-const whyUs = [
+const whyUsConfig: {
+    key: keyof Translations["home"]["whyUs"];
+    icon: ComponentType<{ className?: string }>;
+    extraIcon?: string;
+    extraIcons?: { src: string; href: string; className: string }[];
+}[] = [
     {
+        key: "certified",
         icon: ShieldCheck,
-        title: "Certified Products",
-        desc: "All products are certified and guaranteed original because we are an official distributor.",
     },
     {
+        key: "delivery",
         icon: Truck,
-        title: "Fast Delivery",
-        desc: "We ship to all over Indonesia with fast and reliable logistics provided by our e-commerce partners or you can order by using WhatsApp",
         extraIcon: whatsappIcon,
     },
     {
+        key: "wideRange",
         icon: Wrench,
-        title: "Wide-range of product",
-        desc: "We offer many products from power tools, industrial tools and many more. See our products here!",
         extraIcons: [
             { src: tokopedia, href: "https://www.tokopedia.com/majusuksesteknik", className: "bg-green-600 border-green-500 hover:bg-green-700" },
             { src: shopee, href: "https://shopee.co.id/maju_sukses_teknik", className: "bg-orange-500 border-orange-400 hover:bg-orange-600" },
@@ -34,13 +38,12 @@ const whyUs = [
         ]
     },
     {
+        key: "quality",
         icon: HeadphonesIcon,
-        title: "Quality",
-        desc: "Every product sent-out has undergoes QC to ensure customer satisfaction",
     },
 ];
 
-type WhyUsItem = {
+type WhyUsCardProps = {
     icon: ComponentType<{ className?: string }>;
     title: string;
     desc: string;
@@ -48,7 +51,7 @@ type WhyUsItem = {
     extraIcons?: { src: string; href: string; className: string }[];
 };
 
-function WhyUsCard({ icon: Icon, title, desc, extraIcon, extraIcons }: WhyUsItem) {
+function WhyUsCard({ icon: Icon, title, desc, extraIcon, extraIcons }: WhyUsCardProps) {
     return (
         <div className="relative bg-slate-900/70 backdrop-blur-sm
             border border-slate-700/50 rounded-xl p-5 flex flex-col
@@ -87,6 +90,7 @@ function Home() {
     const trackRef = useRef<HTMLDivElement>(null);
     const posRef = useRef(0);
     const rafRef = useRef<number>(0);
+    const { t } = useLanguage();
 
     const infinite = [...slides, ...slides];
 
@@ -136,13 +140,20 @@ function Home() {
                         Maju Sukses Teknik
                     </h1>
                     <p className="mt-4 text-slate-300 text-base sm:text-lg max-w-2xl leading-relaxed">
-                        Your trusted source for professional power tools and industrial equipment.
+                        {t.home.tagline}
                     </p>
 
                     {/* Why Choose Us Cards (desktop: overlaid on hero) */}
                     <div className="hidden lg:grid mt-10 grid-cols-4 gap-4 w-full max-w-7xl">
-                        {whyUs.map((item) => (
-                            <WhyUsCard key={item.title} {...item} />
+                        {whyUsConfig.map((item) => (
+                            <WhyUsCard
+                                key={item.key}
+                                icon={item.icon}
+                                title={t.home.whyUs[item.key].title}
+                                desc={t.home.whyUs[item.key].desc}
+                                extraIcon={item.extraIcon}
+                                extraIcons={item.extraIcons}
+                            />
                         ))}
                     </div>
                 </div>
@@ -163,8 +174,15 @@ function Home() {
 
             {/* Why Choose Us Cards (mobile/tablet: normal flow below hero) */}
             <div className="lg:hidden grid grid-cols-1 sm:grid-cols-2 gap-4 px-4 py-8 bg-slate-900">
-                {whyUs.map((item) => (
-                    <WhyUsCard key={item.title} {...item} />
+                {whyUsConfig.map((item) => (
+                    <WhyUsCard
+                        key={item.key}
+                        icon={item.icon}
+                        title={t.home.whyUs[item.key].title}
+                        desc={t.home.whyUs[item.key].desc}
+                        extraIcon={item.extraIcon}
+                        extraIcons={item.extraIcons}
+                    />
                 ))}
             </div>
         </div>

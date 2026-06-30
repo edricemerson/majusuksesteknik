@@ -5,12 +5,12 @@ import kaspari from "../photo/kaspari.jpg"
 import tokoLOGO from "../photo/tokopediaLOGO.png"
 import shopeeLOGO from "../photo/shopeeLOGO.png"
 import lazadaLOGO from "../photo/lazadaLOGO.svg"
-
-const words = "NRT PRO & Yamamax Pro Official Distributor".split(" ");
+import { useLanguage } from "../i18n/useLanguage";
 
 const PLAYLIST_SRC = "https://www.youtube.com/embed/videoseries?list=PLyhboHVyLQ9j_RdYuUT-Hr5uXAFdL_Tct";
 
 function AboutUs() {
+    const { t } = useLanguage();
     const headerRef = useRef<HTMLDivElement>(null);
     const bodyRef = useRef<HTMLDivElement>(null);
     const videoRef = useRef<HTMLDivElement>(null);
@@ -48,14 +48,14 @@ function AboutUs() {
                             ${headerVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
                         style={{ transitionDelay: "0ms" }}
                     >
-                        Who We Are
+                        {t.about.whoWeAre}
                     </span>
                     <span
                         className={`text-3xl sm:text-4xl lg:text-5xl text-white font-semibold transition-all duration-500 ease-out
                             ${headerVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
                         style={{ transitionDelay: "100ms" }}
                     >
-                        About Us
+                        {t.about.aboutUs}
                     </span>
                     <div
                         className="h-0.75 bg-blue-500 rounded-full transition-all duration-700 ease-out"
@@ -70,7 +70,7 @@ function AboutUs() {
                 />
 
                 <div className="flex-1 flex flex-wrap gap-x-3 text-2xl sm:text-3xl lg:text-4xl text-gray-300 font-semibold">
-                    {words.map((word, i) => (
+                    {t.about.distributorWords.map((word, i) => (
                         <span
                             key={i}
                             className={`inline-block transition-all duration-500 ease-out
@@ -93,11 +93,7 @@ function AboutUs() {
                     style={{ transitionDelay: "0ms" }}
                 >
                     <p className="text-slate-300 leading-relaxed text-lg max-w-3xl">
-                        MajuSuksesTeknik is the official distributor of NRT Pro and Yamamax Pro,
-                        providing customers with genuine products, reliable support, and trusted
-                        solutions for professional and industrial applications. We are committed to
-                        delivering high-quality equipment and accessories while ensuring competitive
-                        pricing, product authenticity, and excellent customer service.
+                        {t.about.paragraph}
                     </p>
                 </div>
 
@@ -109,8 +105,8 @@ function AboutUs() {
                 >
                     {/* Map */}
                     <div className="flex-1 bg-slate-800/50 border border-slate-700/50 rounded-2xl p-5 flex flex-col gap-3">
-                        <span className="text-white text-lg font-semibold tracking-wide">We are located at</span>
-                        <span className="text-blue-400 text-sm">Dadap, Kosambi, Tangerang Regency, Banten 15211</span>
+                        <span className="text-white text-lg font-semibold tracking-wide">{t.about.locatedAt}</span>
+                        <span className="text-blue-400 text-sm">{t.about.address}</span>
                         <iframe
                             title="MajuSukses Teknik Location"
                             src="https://www.google.com/maps?q=-6.085251,106.703202&output=embed"
@@ -123,7 +119,7 @@ function AboutUs() {
                             rel="noopener noreferrer"
                             className="mt-1 w-full block text-center text-sm font-semibold text-white bg-blue-600 hover:bg-blue-700 transition-colors duration-200 rounded-xl py-2"
                         >
-                            Get Directions
+                            {t.about.getDirections}
                         </a>
                     </div>
 
@@ -131,8 +127,8 @@ function AboutUs() {
 
                     {/* Our Videos */}
                     <div ref={videoRef} className="lg:flex-2 bg-slate-800/50 border border-slate-700/50 rounded-2xl p-5 flex flex-col gap-3">
-                        <span className="text-white text-lg font-semibold tracking-wide">Our Videos</span>
-                        <span className="text-blue-400 text-sm">Browse all our product videos</span>
+                        <span className="text-white text-lg font-semibold tracking-wide">{t.about.ourVideos}</span>
+                        <span className="text-blue-400 text-sm">{t.about.browseVideosDesc}</span>
                         <iframe
                             title="Product Playlist"
                             src={videoVisible ? `${PLAYLIST_SRC}&autoplay=1&mute=1` : PLAYLIST_SRC}
@@ -148,7 +144,7 @@ function AboutUs() {
                                     target="_blank"
                                     rel="noopener noreferrer"
                                 >
-                                    Browse NRT PRO in Youtube
+                                    {t.about.browseNRT}
                                 </a>
                             </div>
                             <div className="flex-1">
@@ -158,7 +154,7 @@ function AboutUs() {
                                     target="_blank"
                                     rel="noopener noreferrer"
                                 >
-                                    Browse Yamamax Pro in Youtube
+                                    {t.about.browseYamamax}
                                 </a>
                             </div>
                         </div>
@@ -170,7 +166,7 @@ function AboutUs() {
                     <div className="flex items-center gap-4 w-full">
                         <div className="flex-1 h-px bg-slate-700/60" />
                             <span className="text-xs font-bold tracking-[0.25em] uppercase text-blue-400 shrink-0">
-                                Trusted By
+                                {t.about.trustedBy}
                             </span>
                         <div className="flex-1 h-px bg-slate-700/60" />
                     </div>

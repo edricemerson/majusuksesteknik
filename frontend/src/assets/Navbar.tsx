@@ -1,8 +1,10 @@
 import { useState } from "react";
-import { Menu, X } from "lucide-react";
+import { Menu, X, Languages } from "lucide-react";
+import { useLanguage } from "../i18n/useLanguage";
 
 function Navbar() {
     const [menuOpen, setMenuOpen] = useState(false);
+    const { language, toggleLanguage, t } = useLanguage();
 
     const scrollToTop = (e: React.MouseEvent) => {
         e.preventDefault();
@@ -26,29 +28,41 @@ function Navbar() {
                     </span>
                 </a>
 
-                {/* Nav links (desktop) */}
-                <div className="hidden md:flex items-center gap-8">
-                    <a href="#" onClick={scrollToTop} className={navLink}>Home</a>
-                    <a href="#about" className={navLink}>About Us</a>
-                    <a href="#reviews" className={navLink}>Reviews</a>
-                </div>
+                <div className="flex items-center gap-3 sm:gap-6">
+                    {/* Nav links (desktop) */}
+                    <div className="hidden md:flex items-center gap-8">
+                        <a href="#" onClick={scrollToTop} className={navLink}>{t.nav.home}</a>
+                        <a href="#about" className={navLink}>{t.nav.about}</a>
+                        <a href="#reviews" className={navLink}>{t.nav.reviews}</a>
+                    </div>
 
-                {/* Menu toggle (mobile) */}
-                <button
-                    className="md:hidden text-slate-300 hover:text-blue-400 transition-colors duration-200"
-                    onClick={() => setMenuOpen((v) => !v)}
-                    aria-label="Toggle menu"
-                >
-                    {menuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-                </button>
+                    {/* Language toggle */}
+                    <button
+                        onClick={toggleLanguage}
+                        className="flex items-center gap-1.5 text-xs font-bold tracking-wide text-slate-300 hover:text-blue-400 border border-slate-700 hover:border-blue-500/50 rounded-full px-3 py-1.5 transition-colors duration-200"
+                        aria-label="Toggle language"
+                    >
+                        <Languages className="w-3.5 h-3.5" />
+                        {language === "en" ? "EN" : "ID"}
+                    </button>
+
+                    {/* Menu toggle (mobile) */}
+                    <button
+                        className="md:hidden text-slate-300 hover:text-blue-400 transition-colors duration-200"
+                        onClick={() => setMenuOpen((v) => !v)}
+                        aria-label="Toggle menu"
+                    >
+                        {menuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+                    </button>
+                </div>
             </div>
 
             {/* Nav links (mobile dropdown) */}
             {menuOpen && (
                 <div className="md:hidden flex flex-col gap-1 px-4 pb-4">
-                    <a href="#" onClick={scrollToTop} className="text-slate-300 font-medium hover:text-blue-400 transition-colors duration-200 py-2">Home</a>
-                    <a href="#about" onClick={() => setMenuOpen(false)} className="text-slate-300 font-medium hover:text-blue-400 transition-colors duration-200 py-2">About Us</a>
-                    <a href="#reviews" onClick={() => setMenuOpen(false)} className="text-slate-300 font-medium hover:text-blue-400 transition-colors duration-200 py-2">Reviews</a>
+                    <a href="#" onClick={scrollToTop} className="text-slate-300 font-medium hover:text-blue-400 transition-colors duration-200 py-2">{t.nav.home}</a>
+                    <a href="#about" onClick={() => setMenuOpen(false)} className="text-slate-300 font-medium hover:text-blue-400 transition-colors duration-200 py-2">{t.nav.about}</a>
+                    <a href="#reviews" onClick={() => setMenuOpen(false)} className="text-slate-300 font-medium hover:text-blue-400 transition-colors duration-200 py-2">{t.nav.reviews}</a>
                 </div>
             )}
 

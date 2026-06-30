@@ -1,4 +1,5 @@
 ﻿import './App.css'
+import { LanguageProvider } from './i18n/LanguageProvider.tsx'
 import Navbar from './assets/Navbar.tsx'
 import Home from './assets/Home.tsx'
 import AboutUs from './assets/AboutUs.tsx'
@@ -7,13 +8,15 @@ import Footer from './assets/Footer.tsx'
 
 function App() {
 return (
-    <div>
-        <Navbar />
-        <Home />
-        <AboutUs />
-        <Review />
-        <Footer />
-    </div>
+    <LanguageProvider>
+        <div>
+            <Navbar />
+            <Home />
+            <AboutUs />
+            <Review />
+            <Footer />
+        </div>
+    </LanguageProvider>
 )
 }
 
